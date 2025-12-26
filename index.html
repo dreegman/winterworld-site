@@ -60,12 +60,17 @@ header {background:#0f2b4c;padding:10px;display:flex;align-items:center;justify-
   <div class="card donate-GOD">
     <h3>GOD</h3>
     <p>Все команды GOD</p>
-    <button class="buy-btn" data-package="GOD">Купить</button>
+    <button onclick="buy('GOD')">Купить</button>
   </div>
   <div class="card donate-VAMPIRE">
     <h3>VAMPIRE</h3>
     <p>Все команды VAMPIRE</p>
-    <button class="buy-btn" data-package="VAMPIRE">Купить</button>
+    <button onclick="buy('VAMPIRE')">Купить</button>
+  </div>
+  <div class="card donate-HYDRA">
+    <h3>HYDRA</h3>
+    <p>Все команды HYDRA</p>
+    <button onclick="buy('HYDRA')">Купить</button>
   </div>
   <!-- Добавь остальные донаты по аналогии -->
 </div>
@@ -74,15 +79,15 @@ header {background:#0f2b4c;padding:10px;display:flex;align-items:center;justify-
 <div class="container" id="cases">
   <h2>Кейсы</h2>
   <div class="case-card">
-    <img src="https://via.placeholder.com/150?text=Donat+Case" data-package="donate">
+    <img src="https://via.placeholder.com/150?text=Donat+Case" onclick="buy('donate')">
     <p>Донат кейс</p>
   </div>
   <div class="case-card">
-    <img src="https://via.placeholder.com/150?text=Super" data-package="super">
+    <img src="https://via.placeholder.com/150?text=Super" onclick="buy('super')">
     <p>Супер донат</p>
   </div>
   <div class="case-card">
-    <img src="https://via.placeholder.com/150?text=Riliks" data-package="riliks">
+    <img src="https://via.placeholder.com/150?text=Riliks" onclick="buy('riliks')">
     <p>Рилики</p>
   </div>
 </div>
@@ -121,8 +126,27 @@ header {background:#0f2b4c;padding:10px;display:flex;align-items:center;justify-
   </div>
 </div>
 
+<!-- Модалка входа админа -->
+<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:3000;align-items:center;justify-content:center;">
+  <div style="background:#121c33;padding:25px;border-radius:10px;width:300px;">
+    <h3>Вход</h3>
+    <input id="loginUser" placeholder="Логин" style="width:100%;margin-bottom:10px;padding:8px;">
+    <input id="loginPass" type="password" placeholder="Пароль" style="width:100%;margin-bottom:10px;padding:8px;">
+    <button onclick="login()" style="width:100%;padding:10px;">Войти</button>
+    <p id="loginError" style="color:red;"></p>
+  </div>
+</div>
+
+<!-- Кнопка входа -->
+<div style="position:fixed;top:15px;right:15px;z-index:2000;">
+  <button onclick="openLogin()" style="padding:8px 15px;border:none;border-radius:6px;cursor:pointer;">Вход</button>
+</div>
+
 <script>
-let currentUser = prompt("Введите ваш ник на сервере:"); // простая имитация аккаунта
+const ADMIN_LOGIN = "DreegmanYT";
+const ADMIN_PASS  = "Ramnat228@";
+let currentUser = prompt("Введите ваш ник на сервере:");
+
 function toggleMenu(){
   const menu = document.querySelector('.menu');
   menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
@@ -132,8 +156,8 @@ function openManualModal(packageName){
   const modal = document.getElementById('manualModal');
   const text = document.getElementById('modalText');
 
-  if(currentUser === "DreegmanYT"){
-    text.innerHTML = `Поздравляем! Так как вы владелец DreegmanYT, пакет "${packageName}" предоставлен <b>бесплатно</b>!`;
+  if(localStorage.getItem("admin")==="true" || currentUser === "DreegmanYT"){
+    text.innerHTML = `Поздравляем! Пакет "${packageName}" выдан <b>бесплатно</b> для владельца.`;
   } else {
     text.innerHTML = `После покупки пакета "${packageName}" выполните следующие шаги:
     <ol>
@@ -149,21 +173,27 @@ function openManualModal(packageName){
 
 function closeManualModal() {document.getElementById('manualModal').style.display = 'none';}
 
-// Привязка кнопок донатов
+// Привязка кнопок донатов и картинок кейсов
 document.querySelectorAll('.buy-btn').forEach(btn => {
-  btn.addEventListener('click', e => {
-    const packageName = e.target.dataset.package;
-    openManualModal(packageName);
-  });
+  btn.addEventListener('click', e => { openManualModal(e.target.innerText); });
+});
+document.querySelectorAll('.case-card img').forEach(img => {
+  img.addEventListener('click', e => { openManualModal(e.target.nextElementSibling.innerText); });
 });
 
-// Привязка картинок кейсов
-document.querySelectorAll('.case-card img').forEach(img => {
-  img.addEventListener('click', e => {
-    const packageName = e.target.dataset.package;
-    openManualModal(packageName);
-  });
-});
+// Вход админа
+function openLogin(){document.getElementById("loginModal").style.display="flex";}
+function login(){
+  const u = document.getElementById("loginUser").value;
+  const p = document.getElementById("loginPass").value;
+
+  if(u === ADMIN_LOGIN && p === ADMIN_PASS){
+    localStorage.setItem("admin","true");
+    location.reload();
+  } else {
+    document.getElementById("loginError").innerText = "Неверный логин или пароль";
+  }
+}
 </script>
 
 </body>
