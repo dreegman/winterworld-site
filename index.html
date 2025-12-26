@@ -6,11 +6,12 @@
 <title>WINTERWORLD</title>
 <style>
 body {margin:0;font-family:Arial,sans-serif;background:#0a1a2c;color:white;}
-header {background:#0f2b4c;padding:10px;display:flex;align-items:center;justify-content:space-between;}
+header {background:#0f2b4c;padding:10px;display:flex;align-items:center;justify-content:space-between;position:relative;}
 .menu {display:flex;gap:15px;}
 .menu a {color:white;text-decoration:none;font-weight:bold;}
 .burger {display:none;cursor:pointer;font-size:24px;}
 @media(max-width:768px){.menu{display:none;flex-direction:column;position:absolute;top:50px;left:0;width:100%;background:#0f2b4c;padding:10px;}.burger{display:block;}}
+
 .container {padding:20px;}
 .card {background:#122b44;padding:20px;margin:15px;border-radius:10px;text-align:center;}
 .card button {margin-top:10px;padding:10px 20px;font-weight:bold;border:none;border-radius:5px;cursor:pointer;}
@@ -29,6 +30,11 @@ header {background:#0f2b4c;padding:10px;display:flex;align-items:center;justify-
 .modal {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;z-index:1000;}
 .modal-content {background:#121c33;padding:30px;border-radius:10px;max-width:500px;width:90%;text-align:left;position:relative;color:white;}
 .close {position:absolute;top:10px;right:15px;cursor:pointer;font-size:24px;}
+
+/* Кейсы с картинками */
+.case-card {display:inline-block;margin:10px;text-align:center;}
+.case-card img {width:150px;height:150px;border-radius:10px;cursor:pointer;transition: transform 0.2s;}
+.case-card img:hover {transform: scale(1.1);}
 </style>
 </head>
 <body>
@@ -48,45 +54,40 @@ header {background:#0f2b4c;padding:10px;display:flex;align-items:center;justify-
   </nav>
 </header>
 
+<!-- Донаты -->
 <div class="container" id="donates">
   <h2>Донаты</h2>
   <div class="card donate-GOD">
     <h3>GOD</h3>
     <p>Все команды GOD</p>
-    <button class="buy-btn">Купить</button>
+    <button class="buy-btn" data-package="GOD">Купить</button>
   </div>
   <div class="card donate-VAMPIRE">
     <h3>VAMPIRE</h3>
     <p>Все команды VAMPIRE</p>
-    <button class="buy-btn">Купить</button>
-  </div>
-  <div class="card donate-HYDRA">
-    <h3>HYDRA</h3>
-    <p>Все команды HYDRA</p>
-    <button class="buy-btn">Купить</button>
+    <button class="buy-btn" data-package="VAMPIRE">Купить</button>
   </div>
   <!-- Добавь остальные донаты по аналогии -->
 </div>
 
+<!-- Кейсы с картинками -->
 <div class="container" id="cases">
   <h2>Кейсы</h2>
-  <div class="card">
-    <h3>Донат кейс</h3>
-    <p>Команда: /cases give &lt;ник&gt; donate 1</p>
-    <button class="buy-btn">Купить</button>
+  <div class="case-card">
+    <img src="https://via.placeholder.com/150?text=Donat+Case" data-package="donate">
+    <p>Донат кейс</p>
   </div>
-  <div class="card">
-    <h3>Супер донат</h3>
-    <p>Команда: /cases give &lt;ник&gt; super 1</p>
-    <button class="buy-btn">Купить</button>
+  <div class="case-card">
+    <img src="https://via.placeholder.com/150?text=Super" data-package="super">
+    <p>Супер донат</p>
   </div>
-  <div class="card">
-    <h3>Рилики</h3>
-    <p>Команда: /cases give &lt;ник&gt; riliks 1</p>
-    <button class="buy-btn">Купить</button>
+  <div class="case-card">
+    <img src="https://via.placeholder.com/150?text=Riliks" data-package="riliks">
+    <p>Рилики</p>
   </div>
 </div>
 
+<!-- Контакты -->
 <div class="container" id="contacts">
   <h2>Контакты владельцев</h2>
   <p>Вадим — DreegmanYT</p>
@@ -94,6 +95,7 @@ header {background:#0f2b4c;padding:10px;display:flex;align-items:center;justify-
   <p>Поддержка в Telegram: <a href="https://t.me/DemonicForest" target="_blank">@DonkKurator_Manager</a></p>
 </div>
 
+<!-- Подачи -->
 <div class="container" id="application">
   <h2>Подачи</h2>
   <ul>
@@ -109,15 +111,8 @@ header {background:#0f2b4c;padding:10px;display:flex;align-items:center;justify-
 <div class="modal" id="manualModal">
   <div class="modal-content">
     <span class="close" onclick="closeManualModal()">&times;</span>
-    <h2>Инструкция после оплаты</h2>
-    <p>После оплаты доната или кейса выполните следующие шаги:</p>
-    <ol>
-      <li>Запомните или скопируйте ваш <b>ник на сервере</b>.</li>
-      <li>Если вы использовали промокод, запишите его.</li>
-      <li>Напишите в Telegram: <b>@DonkKurator_Manager</b>.</li>
-      <li>В сообщении укажите ваш ник и промокод.</li>
-      <li>Дождитесь подтверждения, что донат/кейс будет выдан вручную.</li>
-    </ol>
+    <h2>Инструкция после покупки</h2>
+    <p id="modalText"></p>
     <p>Промокоды:</p>
     <ul>
       <li><b>WinterWorld</b> — 20% скидка</li>
@@ -127,19 +122,46 @@ header {background:#0f2b4c;padding:10px;display:flex;align-items:center;justify-
 </div>
 
 <script>
+let currentUser = prompt("Введите ваш ник на сервере:"); // простая имитация аккаунта
 function toggleMenu(){
   const menu = document.querySelector('.menu');
   menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
 }
 
-function openManualModal() {document.getElementById('manualModal').style.display = 'flex';}
+function openManualModal(packageName){
+  const modal = document.getElementById('manualModal');
+  const text = document.getElementById('modalText');
+
+  if(currentUser === "DreegmanYT"){
+    text.innerHTML = `Поздравляем! Так как вы владелец DreegmanYT, пакет "${packageName}" предоставлен <b>бесплатно</b>!`;
+  } else {
+    text.innerHTML = `После покупки пакета "${packageName}" выполните следующие шаги:
+    <ol>
+      <li>Запомните или скопируйте ваш <b>ник на сервере</b>: ${currentUser}</li>
+      <li>Если вы использовали промокод, запишите его.</li>
+      <li>Напишите в Telegram: <b>@DonkKurator_Manager</b>.</li>
+      <li>Дождитесь подтверждения, что донат/кейс будет выдан вручную.</li>
+    </ol>`;
+  }
+
+  modal.style.display = 'flex';
+}
+
 function closeManualModal() {document.getElementById('manualModal').style.display = 'none';}
 
-// Привязка кнопок "Купить"
+// Привязка кнопок донатов
 document.querySelectorAll('.buy-btn').forEach(btn => {
   btn.addEventListener('click', e => {
-    e.preventDefault();
-    openManualModal();
+    const packageName = e.target.dataset.package;
+    openManualModal(packageName);
+  });
+});
+
+// Привязка картинок кейсов
+document.querySelectorAll('.case-card img').forEach(img => {
+  img.addEventListener('click', e => {
+    const packageName = e.target.dataset.package;
+    openManualModal(packageName);
   });
 });
 </script>
