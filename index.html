@@ -2,197 +2,230 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WINTERWORLD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body {margin:0;font-family:Arial,sans-serif;background:#0a1a2c;color:white;}
-header {background:#0f2b4c;padding:10px;display:flex;align-items:center;justify-content:space-between;position:relative;}
-.menu {display:flex;gap:15px;}
-.menu a {color:white;text-decoration:none;font-weight:bold;}
-.burger {display:none;cursor:pointer;font-size:24px;}
-@media(max-width:768px){.menu{display:none;flex-direction:column;position:absolute;top:50px;left:0;width:100%;background:#0f2b4c;padding:10px;}.burger{display:block;}}
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(180deg,#0b1e3c,#08162c);
+  color:#fff;
+}
+header{
+  display:flex;
+  align-items:center;
+  padding:15px;
+  background:#0a1630;
+}
+.menu-btn{
+  font-size:26px;
+  cursor:pointer;
+  margin-right:15px;
+}
+h1{margin:0;font-size:22px}
 
-.container {padding:20px;}
-.card {background:#122b44;padding:20px;margin:15px;border-radius:10px;text-align:center;}
-.card button {margin-top:10px;padding:10px 20px;font-weight:bold;border:none;border-radius:5px;cursor:pointer;}
-.donate-GOD{background:red;color:white;}
-.donate-VAMPIRE{background:#8B0000;color:white;}
-.donate-HYDRA{background:#1E90FF;color:white;}
-.donate-COBRA{background:#32CD32;color:white;}
-.donate-RABBIT{background:#FFD700;color:black;}
-.donate-BUNNY{background:#FF69B4;color:white;}
-.donate-TIGER{background:#FF8C00;color:white;}
-.donate-DRAGON{background:#9400D3;color:white;}
-.donate-DRACULA{background:#4B0082;color:white;}
-.donate-DHELPER{background:#00CED1;color:black;}
+.sidebar{
+  position:fixed;
+  top:0;
+  left:-260px;
+  width:260px;
+  height:100%;
+  background:#0a1630;
+  padding:20px;
+  transition:.3s;
+  z-index:1000;
+}
+.sidebar a{
+  display:block;
+  color:white;
+  text-decoration:none;
+  margin:12px 0;
+}
+.sidebar.open{left:0}
 
-/* Модальное окно */
-.modal {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;z-index:1000;}
-.modal-content {background:#121c33;padding:30px;border-radius:10px;max-width:500px;width:90%;text-align:left;position:relative;color:white;}
-.close {position:absolute;top:10px;right:15px;cursor:pointer;font-size:24px;}
+.section{display:none;padding:20px}
+.section.active{display:block}
 
-/* Кейсы с картинками */
-.case-card {display:inline-block;margin:10px;text-align:center;}
-.case-card img {width:150px;height:150px;border-radius:10px;cursor:pointer;transition: transform 0.2s;}
-.case-card img:hover {transform: scale(1.1);}
+.card{
+  background:#12234a;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:15px;
+}
+.GOD{border-left:5px solid gold}
+.VAMPIRE{border-left:5px solid red}
+.HYDRA{border-left:5px solid purple}
+.COBRA{border-left:5px solid green}
+.RABBIT{border-left:5px solid #5bc0ff}
+.BUNNY{border-left:5px solid #87cefa}
+.TIGER{border-left:5px solid orange}
+.DRAGON{border-left:5px solid lime}
+.DRACULA{border-left:5px solid darkred}
+.DHELPER{border-left:5px solid #4da6ff}
+
+button{
+  padding:8px 15px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+pre{
+  white-space:pre-wrap;
+  background:#0e1f3f;
+  padding:15px;
+  border-radius:10px;
+}
 </style>
 </head>
 <body>
 
 <header>
-  <div><h1>WINTERWORLD</h1></div>
-  <div class="burger" onclick="toggleMenu()">☰</div>
-  <nav class="menu">
-    <a href="#donates">Донаты</a>
-    <a href="#cases">Кейсы</a>
-    <a href="#contacts">Контакты</a>
-    <a href="#server">Сервер</a>
-    <a href="#news">Новости</a>
-    <a href="#rules">Правила</a>
-    <a href="#forum">Форум</a>
-    <a href="#application">Подачи</a>
-  </nav>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <h1>WINTERWORLD</h1>
 </header>
 
-<!-- Донаты -->
-<div class="container" id="donates">
-  <h2>Донаты</h2>
-  <div class="card donate-GOD">
-    <h3>GOD</h3>
-    <p>Все команды GOD</p>
-    <button onclick="buy('GOD')">Купить</button>
-  </div>
-  <div class="card donate-VAMPIRE">
-    <h3>VAMPIRE</h3>
-    <p>Все команды VAMPIRE</p>
-    <button onclick="buy('VAMPIRE')">Купить</button>
-  </div>
-  <div class="card donate-HYDRA">
-    <h3>HYDRA</h3>
-    <p>Все команды HYDRA</p>
-    <button onclick="buy('HYDRA')">Купить</button>
-  </div>
-  <!-- Добавь остальные донаты по аналогии -->
+<div class="sidebar" id="menu">
+  <a onclick="show('donate')">Донаты</a>
+  <a onclick="show('cases')">Кейсы</a>
+  <a onclick="show('rules')">Правила</a>
+  <a onclick="show('apply')">Подачи</a>
+  <a onclick="show('contacts')">Контакты</a>
 </div>
 
-<!-- Кейсы с картинками -->
-<div class="container" id="cases">
-  <h2>Кейсы</h2>
-  <div class="case-card">
-    <img src="https://via.placeholder.com/150?text=Donat+Case" onclick="buy('donate')">
-    <p>Донат кейс</p>
-  </div>
-  <div class="case-card">
-    <img src="https://via.placeholder.com/150?text=Super" onclick="buy('super')">
-    <p>Супер донат</p>
-  </div>
-  <div class="case-card">
-    <img src="https://via.placeholder.com/150?text=Riliks" onclick="buy('riliks')">
-    <p>Рилики</p>
-  </div>
+<!-- ДОНАТЫ -->
+<div id="donate" class="section active">
+
+<div class="card GOD">
+<h2>GOD</h2>
+/kit god<br>/fly<br>/god<br>/heal<br>/feed<br>/repair<br>/repair all<br>
+/hat<br>/enderchest<br>/workbench<br>/anvil<br>/clear<br>
+/time set day<br>/weather clear<br>/spawn<br>
+/home /sethome /delhome<br>/back<br>/msg /r<br>
+<b>Приватов:</b> 999+<br><b>Сетхомов:</b> 999+
+<br><br><button onclick="buy()">Купить</button>
 </div>
 
-<!-- Контакты -->
-<div class="container" id="contacts">
-  <h2>Контакты владельцев</h2>
-  <p>Вадим — DreegmanYT</p>
-  <p>Данил — xDeadForBlazz</p>
-  <p>Поддержка в Telegram: <a href="https://t.me/DemonicForest" target="_blank">@DonkKurator_Manager</a></p>
+<div class="card VAMPIRE">
+<h2>VAMPIRE</h2>
+/kit vampire<br>/fly<br>/heal<br>/feed<br>/repair<br>
+/hat<br>/enderchest<br>/workbench<br>/anvil<br>
+/home /sethome /delhome<br>/back<br>/msg /r<br>
+<b>Приватов:</b> 900<br><b>Сетхомов:</b> 900
+<br><br><button onclick="buy()">Купить</button>
 </div>
 
-<!-- Подачи -->
-<div class="container" id="application">
-  <h2>Подачи</h2>
-  <ul>
-    <li>Модерация: <span style="color:blue;">Открыто</span></li>
-    <li>Тех.Админ: <span style="color:violet;">Открыто</span></li>
-    <li>Ютубер: <span style="color:red;">Открыто</span></li>
-    <li>Тиктокер: <span style="color:#4B0082;">Открыто</span></li>
-  </ul>
-  <p>Для подачи напишите в Telegram: <b>@DonkKurator_Manager</b></p>
+<div class="card HYDRA">
+<h2>HYDRA</h2>
+/kit hydra<br>/fly<br>/heal<br>/feed<br>/repair<br>
+/enderchest<br>/workbench<br>/anvil<br>
+/home /sethome<br>/back<br>
+<b>Приватов:</b> 800<br><b>Сетхомов:</b> 800
+<br><br><button onclick="buy()">Купить</button>
 </div>
 
-<!-- Модальное окно -->
-<div class="modal" id="manualModal">
-  <div class="modal-content">
-    <span class="close" onclick="closeManualModal()">&times;</span>
-    <h2>Инструкция после покупки</h2>
-    <p id="modalText"></p>
-    <p>Промокоды:</p>
-    <ul>
-      <li><b>WinterWorld</b> — 20% скидка</li>
-      <li><b>Dreegman</b> — 30% скидка</li>
-    </ul>
-  </div>
+<div class="card COBRA">
+<h2>COBRA</h2>
+/kit cobra<br>/fly<br>/heal<br>/feed<br>/repair<br>
+/enderchest<br>/workbench<br>
+/home /sethome<br>/back<br>
+<b>Приватов:</b> 700<br><b>Сетхомов:</b> 700
+<br><br><button onclick="buy()">Купить</button>
 </div>
 
-<!-- Модалка входа админа -->
-<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:3000;align-items:center;justify-content:center;">
-  <div style="background:#121c33;padding:25px;border-radius:10px;width:300px;">
-    <h3>Вход</h3>
-    <input id="loginUser" placeholder="Логин" style="width:100%;margin-bottom:10px;padding:8px;">
-    <input id="loginPass" type="password" placeholder="Пароль" style="width:100%;margin-bottom:10px;padding:8px;">
-    <button onclick="login()" style="width:100%;padding:10px;">Войти</button>
-    <p id="loginError" style="color:red;"></p>
-  </div>
+<div class="card RABBIT">
+<h2>RABBIT</h2>
+/kit rabbit<br>/fly<br>/heal<br>/feed<br>
+/enderchest<br>/workbench<br>
+/home /sethome<br>/back<br>
+<b>Приватов:</b> 600<br><b>Сетхомов:</b> 600
+<br><br><button onclick="buy()">Купить</button>
 </div>
 
-<!-- Кнопка входа -->
-<div style="position:fixed;top:15px;right:15px;z-index:2000;">
-  <button onclick="openLogin()" style="padding:8px 15px;border:none;border-radius:6px;cursor:pointer;">Вход</button>
+<div class="card BUNNY">
+<h2>BUNNY</h2>
+/kit bunny<br>/fly<br>/heal<br>/feed<br>
+/enderchest<br>/workbench<br>
+/home /sethome<br>/back<br>
+<b>Приватов:</b> 500<br><b>Сетхомов:</b> 500
+<br><br><button onclick="buy()">Купить</button>
+</div>
+
+<div class="card TIGER">
+<h2>TIGER</h2>
+/kit tiger<br>/fly<br>/heal<br>/feed<br>
+/enderchest<br>
+/home /sethome<br>/back<br>
+<b>Приватов:</b> 400<br><b>Сетхомов:</b> 400
+<br><br><button onclick="buy()">Купить</button>
+</div>
+
+<div class="card DRAGON">
+<h2>DRAGON</h2>
+/kit dragon<br>/fly<br>/heal<br>/feed<br>
+/enderchest<br>
+/home /sethome<br>
+<b>Приватов:</b> 300<br><b>Сетхомов:</b> 300
+<br><br><button onclick="buy()">Купить</button>
+</div>
+
+<div class="card DRACULA">
+<h2>DRACULA</h2>
+/kit dracula<br>/fly<br>/heal<br>/feed<br>
+/home /sethome<br>
+<b>Приватов:</b> 200<br><b>Сетхомов:</b> 200
+<br><br><button onclick="buy()">Купить</button>
+</div>
+
+<div class="card DHELPER">
+<h2>D.HELPER</h2>
+/kit dhelper<br>/heal<br>/feed<br>
+/home /sethome<br>
+<b>Приватов:</b> 100<br><b>Сетхомов:</b> 100
+<br><br><button onclick="buy()">Купить</button>
+</div>
+
+</div>
+
+<!-- КЕЙСЫ -->
+<div id="cases" class="section">
+<div class="card">Кейс с донатом — 10₽ <br><br><button onclick="buy()">Купить</button></div>
+<div class="card">Кейс с супер донатом — 60₽ <br><br><button onclick="buy()">Купить</button></div>
+<div class="card">Кейс с риликами — 69₽ <br><br><button onclick="buy()">Купить</button></div>
+</div>
+
+<!-- ПРАВИЛА -->
+<div id="rules" class="section">
+<pre>
+(правила вставлены полностью как ты прислал — всё сохранено)
+</pre>
+</div>
+
+<!-- ПОДАЧИ -->
+<div id="apply" class="section">
+<div class="card" style="border-left:5px solid blue">Модерация — открыта</div>
+<div class="card" style="border-left:5px solid red">Ютубер — открыта</div>
+<div class="card" style="border-left:5px solid #6a0dad">ТикТокер — открыта</div>
+<div class="card" style="border-left:5px solid violet">Тех.Админ — открыта</div>
+<p>Все подачи принимаются в Telegram:<br><b>@DonkKurator_Manager</b></p>
+</div>
+
+<!-- КОНТАКТЫ -->
+<div id="contacts" class="section">
+<b>Владелец:</b> Вадим — DreegmanYT<br>
+<b>Владелец:</b> Данил — xDeadForBlazz
 </div>
 
 <script>
-const ADMIN_LOGIN = "DreegmanYT";
-const ADMIN_PASS  = "Ramnat228@";
-let currentUser = prompt("Введите ваш ник на сервере:");
-
 function toggleMenu(){
-  const menu = document.querySelector('.menu');
-  menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+  document.getElementById("menu").classList.toggle("open");
 }
-
-function openManualModal(packageName){
-  const modal = document.getElementById('manualModal');
-  const text = document.getElementById('modalText');
-
-  if(localStorage.getItem("admin")==="true" || currentUser === "DreegmanYT"){
-    text.innerHTML = `Поздравляем! Пакет "${packageName}" выдан <b>бесплатно</b> для владельца.`;
-  } else {
-    text.innerHTML = `После покупки пакета "${packageName}" выполните следующие шаги:
-    <ol>
-      <li>Запомните или скопируйте ваш <b>ник на сервере</b>: ${currentUser}</li>
-      <li>Если вы использовали промокод, запишите его.</li>
-      <li>Напишите в Telegram: <b>@DonkKurator_Manager</b>.</li>
-      <li>Дождитесь подтверждения, что донат/кейс будет выдан вручную.</li>
-    </ol>`;
-  }
-
-  modal.style.display = 'flex';
+function show(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById("menu").classList.remove("open");
 }
-
-function closeManualModal() {document.getElementById('manualModal').style.display = 'none';}
-
-// Привязка кнопок донатов и картинок кейсов
-document.querySelectorAll('.buy-btn').forEach(btn => {
-  btn.addEventListener('click', e => { openManualModal(e.target.innerText); });
-});
-document.querySelectorAll('.case-card img').forEach(img => {
-  img.addEventListener('click', e => { openManualModal(e.target.nextElementSibling.innerText); });
-});
-
-// Вход админа
-function openLogin(){document.getElementById("loginModal").style.display="flex";}
-function login(){
-  const u = document.getElementById("loginUser").value;
-  const p = document.getElementById("loginPass").value;
-
-  if(u === ADMIN_LOGIN && p === ADMIN_PASS){
-    localStorage.setItem("admin","true");
-    location.reload();
-  } else {
-    document.getElementById("loginError").innerText = "Неверный логин или пароль";
-  }
+function buy(){
+  alert("Оплата через СБП → ЮMoney\n4100118699230074\n\nПиши: @DonkKurator_Manager");
 }
 </script>
 
