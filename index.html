@@ -4,157 +4,416 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WINTERWORLD — Minecraft магазин</title>
-
 <style>
 body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#0b0f1a;
-    color:white;
+  margin:0;
+  font-family:Arial, sans-serif;
+  background: linear-gradient(to bottom,#0b0f1a,#102a4d);
+  color:white;
+  overflow-x:hidden;
+  position:relative;
 }
 header{
-    background:linear-gradient(120deg,#0a1a33,#102a4d);
-    padding:40px;
-    text-align:center;
+  background: linear-gradient(120deg,#0a1a33,#102a4d);
+  padding:20px 0;
+  text-align:center;
 }
 header h1{
-    font-size:48px;
-    color:#9fdcff;
+  font-size:48px;
+  color:#9fdcff;
+  margin:0;
 }
-header p{
-    font-size:18px;
+nav{
+  background:#0a1a33;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
 }
-.btn{
-    display:inline-block;
-    margin-top:10px;
-    padding:12px 25px;
-    background:#1e90ff;
-    color:white;
-    text-decoration:none;
-    border-radius:6px;
-    font-weight:bold;
+nav a{
+  color:white;
+  text-decoration:none;
+  padding:15px 25px;
+  display:block;
+  transition:0.3s;
+}
+nav a:hover{
+  background:#1e90ff;
+  color:white;
+  border-radius:5px;
 }
 section{
-    padding:40px;
-    max-width:1200px;
-    margin:auto;
+  padding:40px;
+  max-width:1200px;
+  margin:auto;
+  position:relative;
+  z-index:1;
 }
-.shop{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
+.shop, .cases{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
 }
 .item{
-    background:#121c33;
-    border-radius:10px;
-    padding:20px;
-    text-align:center;
+  border-radius:10px;
+  padding:20px;
+  text-align:center;
+  transition:0.3s;
+  cursor:pointer;
 }
 .item h3{
-    color:#ffd700;
+  margin:0;
+  padding:0;
 }
 .price{
-    font-size:22px;
-    margin:10px 0;
+  font-size:22px;
+  margin:10px 0;
 }
-footer{
-    background:#070b14;
-    padding:25px;
-    text-align:center;
-    font-size:14px;
+.btn{
+  display:inline-block;
+  margin-top:10px;
+  padding:10px 20px;
+  background:#1e90ff;
+  color:white;
+  text-decoration:none;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
 }
-a{color:#6ecbff;}
+.btn:hover{
+  background:#63b3ed;
+}
+.modal{
+  display:none;
+  position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.8);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+.modal-content{
+  background:#121c33;
+  padding:30px;
+  border-radius:10px;
+  max-width:500px;
+  width:90%;
+  text-align:left;
+  position:relative;
+}
+.close{
+  position:absolute;
+  top:10px;
+  right:15px;
+  cursor:pointer;
+  font-size:24px;
+}
+input, select{
+  width:100%;
+  padding:8px;
+  margin:5px 0 15px 0;
+  border-radius:5px;
+  border:none;
+}
+#finalPrice{
+  font-weight:bold;
+  font-size:18px;
+  color:#ffd700;
+}
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  pointer-events:none;
+  z-index:0;
+}
 </style>
 </head>
-
 <body>
 
+<canvas id="snowCanvas"></canvas>
+
 <header>
-    <h1>WINTERWORLD</h1>
-    <p>IP: <b>WinterWorlds.minerent.io</b> | Версия: <b>1.16.5</b></p>
+  <h1>WINTERWORLD</h1>
+  <p>IP: <b>WinterWorlds.minerent.io</b> | Версия: <b>1.16.5</b></p>
 </header>
 
-<section id="shop">
-<h2>🛒 Магазин донатов (СБП → YooMoney)</h2>
+<nav>
+  <a href="#shop">Магазин</a>
+  <a href="#cases">Кейсы</a>
+  <a href="#contacts">Контакты</a>
+  <a href="#server">Сервер</a>
+  <a href="#news">Новости</a>
+  <a href="#rules">Правила</a>
+  <a href="#forum">Форум</a>
+</nav>
 
+<section id="shop">
+<h2>🛒 Магазин донатов</h2>
 <div class="shop">
 
-<div class="item">
+<div class="item" style="background:#ffd700;" onclick="openModal('GOD')">
 <h3>GOD</h3>
 <div class="price">999 ₽</div>
-<a class="btn" href="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=GOD WINTERWORLD&default-sum=999&button-text=11&payment-type-choice=on&quickpay=shop&account=4100118699230074">Оплатить по СБП</a>
 </div>
-
-<div class="item">
+<div class="item" style="background:#ff0000;" onclick="openModal('VAMPIRE')">
 <h3>VAMPIRE</h3>
 <div class="price">699 ₽</div>
-<a class="btn" href="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=VAMPIRE WINTERWORLD&default-sum=699&button-text=11&payment-type-choice=on&quickpay=shop&account=4100118699230074">Оплатить по СБП</a>
 </div>
-
-<div class="item">
+<div class="item" style="background:#1e90ff;" onclick="openModal('HYDRA')">
 <h3>HYDRA</h3>
 <div class="price">599 ₽</div>
-<a class="btn" href="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=HYDRA WINTERWORLD&default-sum=599&button-text=11&payment-type-choice=on&quickpay=shop&account=4100118699230074">Оплатить по СБП</a>
 </div>
-
-<div class="item">
+<div class="item" style="background:#32cd32;" onclick="openModal('COBRA')">
 <h3>COBRA</h3>
 <div class="price">499 ₽</div>
-<a class="btn" href="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=COBRA WINTERWORLD&default-sum=499&button-text=11&payment-type-choice=on&quickpay=shop&account=4100118699230074">Оплатить по СБП</a>
 </div>
-
-<div class="item">
+<div class="item" style="background:#ff8c00;" onclick="openModal('RABBIT')">
 <h3>RABBIT</h3>
 <div class="price">199 ₽</div>
-<a class="btn" href="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=RABBIT WINTERWORLD&default-sum=199&button-text=11&payment-type-choice=on&quickpay=shop&account=4100118699230074">Оплатить по СБП</a>
 </div>
-
-<div class="item">
+<div class="item" style="background:#ff69b4;" onclick="openModal('BUNNY')">
 <h3>BUNNY</h3>
 <div class="price">149 ₽</div>
-<a class="btn" href="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=BUNNY WINTERWORLD&default-sum=149&button-text=11&payment-type-choice=on&quickpay=shop&account=4100118699230074">Оплатить по СБП</a>
 </div>
-
-<div class="item">
+<div class="item" style="background:#ff4500;" onclick="openModal('TIGER')">
 <h3>TIGER</h3>
 <div class="price">399 ₽</div>
-<a class="btn" href="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=TIGER WINTERWORLD&default-sum=399&button-text=11&payment-type-choice=on&quickpay=shop&account=4100118699230074">Оплатить по СБП</a>
 </div>
-
-<div class="item">
+<div class="item" style="background:#800080;" onclick="openModal('DRAGON')">
 <h3>DRAGON</h3>
 <div class="price">799 ₽</div>
-<a class="btn" href="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=DRAGON WINTERWORLD&default-sum=799&button-text=11&payment-type-choice=on&quickpay=shop&account=4100118699230074">Оплатить по СБП</a>
 </div>
-
-<div class="item">
+<div class="item" style="background:#8b0000;" onclick="openModal('DRACULA')">
 <h3>DRACULA</h3>
 <div class="price">649 ₽</div>
-<a class="btn" href="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=DRACULA WINTERWORLD&default-sum=649&button-text=11&payment-type-choice=on&quickpay=shop&account=4100118699230074">Оплатить по СБП</a>
 </div>
-
-<div class="item">
+<div class="item" style="background:#00ced1;" onclick="openModal('DHELPER')">
 <h3>D.HELPER</h3>
 <div class="price">299 ₽</div>
-<a class="btn" href="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=DHELPER WINTERWORLD&default-sum=299&button-text=11&payment-type-choice=on&quickpay=shop&account=4100118699230074">Оплатить по СБП</a>
 </div>
 
 </div>
 </section>
 
-<section>
-<h2>📞 Контакты и поддержка</h2>
+<section id="cases">
+<h2>🎁 Кейсы</h2>
+<div class="cases">
+<div class="item" style="background:#ffb347;" onclick="openCase('donateCase')">
+<h3>Кейс с донатом</h3>
+<div class="price">10 ₽</div>
+</div>
+<div class="item" style="background:#ff6f61;" onclick="openCase('superCase')">
+<h3>Кейс с супер донатом</h3>
+<div class="price">60 ₽</div>
+</div>
+<div class="item" style="background:#8a2be2;" onclick="openCase('rilikiCase')">
+<h3>Кейс с риликами</h3>
+<div class="price">69 ₽</div>
+</div>
+</div>
+</section>
+
+<!-- Modal для донатов и кейсов -->
+<div class="modal" id="donateModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2 id="donateName"></h2>
+    <p id="commandsTitle">Доступные команды:</p>
+    <ul id="commandsList"></ul>
+    <hr>
+    <h3>Купить</h3>
+    <label>Ник на сервере:</label>
+    <input type="text" id="playerName" placeholder="Ваш ник на сервере">
+    <label>Email (Gmail):</label>
+    <input type="email" id="playerEmail" placeholder="example@gmail.com">
+    <label>Промокод (только для донатов):</label>
+    <input type="text" id="promoCode" placeholder="WinterWorld или Dreegman" oninput="applyPromo()">
+    <p>Итоговая цена: <span id="finalPrice"></span> ₽</p>
+    <a id="buyLink" class="btn" href="#" target="_blank">Оплатить через СБП</a>
+  </div>
+</div>
+
+<section id="contacts">
+<h2>📞 Контакты и владельцы</h2>
 <p>
+1. Вадим — <b>DreegmanYT</b><br>
+2. Данил — <b>xDeadForBlazz</b><br>
 Telegram: <a href="https://t.me/DemonicForest">t.me/DemonicForest</a><br>
-Discord: <a href="https://discord.gg/Nz2vZR6s">discord.gg/Nz2vZR6s</a><br><br>
-Поддержка в ЛС Telegram: <b>@DonkKurator_Manager</b><br>
-Оплата: <b>СБП → YooMoney</b>
+Discord: <a href="https://discord.gg/Nz2vZR6s">discord.gg/Nz2vZR6s</a>
 </p>
+</section>
+
+<section id="rules">
+<h2>📜 Правила сервера</h2>
+<ul>
+<li>Не нарушать правила сервера.</li>
+<li>Запрещено читерство и баг-эксплоиты.</li>
+<li>Уважать других игроков.</li>
+<li>Запрещены оскорбления и флуд.</li>
+<li>Следовать указаниям администрации.</li>
+</ul>
+</section>
+
+<section id="forum">
+<h2>📝 Форум / Заявки</h2>
+<ul>
+<li><a href="#" onclick="openApply('moderator')">Подать заявку на Модератора</a></li>
+<li><a href="#" onclick="openApply('helper')">Подать заявку на Хелпера</a></li>
+<li><a href="#" onclick="openApply('yt')">Подать заявку на YouTuber</a></li>
+<li><a href="#" onclick="openApply('tt')">Подать заявку на TikToker</a></li>
+<li><a href="#" onclick="openApply('tech')">Подать заявку на Тех.Админа</a></li>
+<li><a href="#" onclick="openApply('complaint')">Подать жалобу на администрацию/модерацию</a></li>
+</ul>
 </section>
 
 <footer>
 © 2025 WINTERWORLD — Minecraft сервер
 </footer>
 
+<!-- Модальное окно подачи -->
+<div class="modal" id="applyModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeApply()">&times;</span>
+    <h2 id="applyTitle"></h2>
+    <div id="applyForm"></div>
+  </div>
+</div>
+
+<script>
+// Донаты
+const donates = {
+  GOD:['Команда1','Команда2','Команда3'],
+  VAMPIRE:['/fly','/heal','/vampirepower'],
+  HYDRA:['/hydra','/speed','/strength'],
+  COBRA:['/cobra','/invisibility'],
+  RABBIT:['/jump','/speed'],
+  BUNNY:['/bunny','/speedboost'],
+  TIGER:['/tiger','/strength'],
+  DRAGON:['/dragon','/fly','/fireball'],
+  DRACULA:['/dracula','/nightvision','/heal'],
+  DHELPER:['/helper','/teleport','/info']
+};
+const basePrices={GOD:999,VAMPIRE:699,HYDRA:599,COBRA:499,RABBIT:199,BUNNY:149,TIGER:399,DRAGON:799,DRACULA:649,DHELPER:299};
+let currentDonate='';
+
+function openModal(name){
+  currentDonate=name;
+  document.getElementById('donateName').innerText=name;
+  let list=document.getElementById('commandsList');
+  if(donates[name]){
+    document.getElementById('commandsTitle').style.display='block';
+    list.innerHTML='';
+    donates[name].forEach(cmd=>{
+      let li=document.createElement('li');
+      li.innerText=cmd;
+      list.appendChild(li);
+    });
+  } else {
+    document.getElementById('commandsTitle').style.display='none';
+    list.innerHTML='';
+  }
+  document.getElementById('finalPrice').innerText=basePrices[name]||getCasePrice(name);
+  document.getElementById('promoCode').value='';
+  document.getElementById('donateModal').style.display='flex';
+  updateBuyLink();
+}
+
+function closeModal(){document.getElementById('donateModal').style.display='none';}
+
+function applyPromo(){
+  let code=document.getElementById('promoCode').value.trim();
+  let price=basePrices[currentDonate]||getCasePrice(currentDonate);
+  if(code.toLowerCase()==='winterworld'){price=Math.floor(price*0.8);}
+  else if(code.toLowerCase()==='dreegman'){price=Math.floor(price*0.7);}
+  document.getElementById('finalPrice').innerText=price;
+  updateBuyLink();
+}
+
+function updateBuyLink(){
+  let name=document.getElementById('playerName').value||'Игрок';
+  let email=document.getElementById('playerEmail').value||'example@gmail.com';
+  let amount=document.getElementById('finalPrice').innerText||basePrices[currentDonate]||getCasePrice(currentDonate);
+  let link=`https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=${currentDonate} WINTERWORLD&default-sum=${amount}&button-text=11&payment-type-choice=on&quickpay=shop&account=4100118699230074`;
+  document.getElementById('buyLink').href=link;
+}
+
+// Кейсы
+function getCasePrice(name){
+  if(name==='donateCase') return 10;
+  if(name==='superCase') return 60;
+  if(name==='rilikiCase') return 69;
+  return 0;
+}
+function openCase(name){currentDonate=name;openModal(name);}
+
+// Подача
+function openApply(type){
+  const modal=document.getElementById('applyModal');
+  const form=document.getElementById('applyForm');
+  const title=document.getElementById('applyTitle');
+  form.innerHTML='';
+  if(type==='tech'){
+    title.innerText='Подача на Тех.Админа';
+    form.innerHTML='<p>Подача на Тех.Админа пока закрыта</p>';
+  } else {
+    let titleMap={'moderator':'Модератор','helper':'Хелпер','yt':'YouTuber','tt':'TikToker','complaint':'Жалоба'};
+    title.innerText='Подача на '+titleMap[type];
+    form.innerHTML=`<label>Ник на сервере:</label><input type="text" placeholder="Ваш ник">
+    <label>Telegram/Discord:</label><input type="text" placeholder="@username">
+    <label>Сообщение:</label><textarea placeholder="Почему хотите на ${titleMap[type]}?"></textarea>
+    <label>Опыт:</label><textarea placeholder="Есть ли опыт?"></textarea>
+    <a class="btn" href="#">Отправить</a>`;
+  }
+  modal.style.display='flex';
+}
+function closeApply(){document.getElementById('applyModal').style.display='none';}
+
+// Закрытие модального окна по клику вне окна
+window.onclick=function(event){
+  let modal=document.getElementById('donateModal');
+  if(event.target==modal){closeModal();}
+  modal=document.getElementById('applyModal');
+  if(event.target==modal){closeApply();}
+}
+
+// Снег
+const canvas=document.getElementById('snowCanvas');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+let flakes=[];
+const flakesCount=150;
+for(let i=0;i<flakesCount;i++){
+  flakes.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*4+1,d:Math.random()*flakesCount});
+}
+function drawFlakes(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="white";
+  ctx.beginPath();
+  for(let i=0;i<flakes.length;i++){
+    let f=flakes[i];
+    ctx.moveTo(f.x,f.y);
+    ctx.arc(f.x,f.y,f.r,0,Math.PI*2,true);
+  }
+  ctx.fill();
+  moveFlakes();
+}
+let angle=0;
+function moveFlakes(){
+  angle+=0.01;
+  for(let i=0;i<flakes.length;i++){
+    let f=flakes[i];
+    f.y+=Math.cos(angle+f.d)+1+f.r/2;
+    f.x+=Math.sin(angle)*2;
+    if(f.x>canvas.width+5||f.x<-5||f.y>canvas.height){
+      if(i%3>0){flakes[i]={x:Math.random()*canvas.width,y:-10,r:f.r,d:f.d};}
+      else{if(Math.sin(angle)>0){flakes[i]={x:-5,y:Math.random()*canvas.height,r:f.r,d:f.d};}else{flakes[i]={x:canvas.width+5,y:Math.random()*canvas.height,r:f.r,d:f.d};}}
+    }
+  }
+}
+setInterval(drawFlakes,25);
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+</script>
 </body>
 </html>
